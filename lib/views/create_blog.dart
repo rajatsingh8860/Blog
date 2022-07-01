@@ -22,9 +22,9 @@ class _BlogPageState extends State<CreateBlog> {
 
   //This method is used to pick image from gallery and save it to the selectedImage variable
   Future getImage() async{
-    var image=await ImagePicker.pickImage(source:ImageSource.gallery);
+    var image=await ImagePicker().pickImage(source:ImageSource.gallery);
     setState((){
-      selectedImage=image;
+      selectedImage= File(image.path);
     });
   }
 
@@ -35,9 +35,12 @@ class _BlogPageState extends State<CreateBlog> {
         _isLoading=true;
       });
       //This is used to upload image to firebase database.
-      StorageReference firebaseStorageRef =FirebaseStorage.instance.ref().child("blogImage").child("${randomAlphaNumeric(9)}.jpg");
-      final StorageUploadTask task =firebaseStorageRef.putFile(selectedImage);
-      var downloadUrl=await(await task.onComplete).ref.getDownloadURL();
+      Reference firebaseStorageRef =FirebaseStorage.instance.ref().child("blogImage").child("${randomAlphaNumeric(9)}.jpg");
+      final UploadTask task =firebaseStorageRef.putFile(selectedImage);
+      var downloadUrl="";
+      await task.whenComplete(() async  {
+        downloadUrl = await firebaseStorageRef.getDownloadURL();
+      } );
       Map<String,String> blogMap={
         "imgUrl": downloadUrl,
         "authorName":authorName,

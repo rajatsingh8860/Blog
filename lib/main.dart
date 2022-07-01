@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import './views/create_blog.dart';
 import './views/home.dart';
-void main() => runApp(MyApp());
+import 'package:firebase_core/firebase_core.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -11,9 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData.dark(),
-      home:HomePage(),
+      home: HomePage(),
     );
   }
 }
-
-

@@ -51,13 +51,13 @@ class _HomePageState extends State<HomePage> {
           elevation: 0.0,
         ),
         body:new StreamBuilder(
-          stream: Firestore.instance.collection('myblog').snapshots(),
+          stream: FirebaseFirestore.instance.collection('myblog').snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
             if(!snapshot.hasData) return Container(
               alignment: Alignment.center,
               child: new CircularProgressIndicator());
             return new ListView(
-              children:snapshot.data.documents.map((document){
+              children:snapshot.data.docs.map((document){
                 return BlogTile(imgUrl: document["imgUrl"], 
                   title: document["title"], 
                   description: document["desc"], 
